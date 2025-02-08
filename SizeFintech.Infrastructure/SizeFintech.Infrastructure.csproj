@@ -7,9 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DataAccess\" />
     <Folder Include="Extensions\" />
-    <Folder Include="Migrations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.12" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.2" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SizeFintech.Domain\SizeFintech.Domain.csproj" />
   </ItemGroup>
 
 </Project>

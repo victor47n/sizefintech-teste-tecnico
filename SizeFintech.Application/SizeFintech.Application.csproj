@@ -7,10 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="UseCases\AnticipationLimits\GetAll\" />
-    <Folder Include="UseCases\Anticipations\Register\" />
-    <Folder Include="UseCases\Industries\GetAll\" />
-    <Folder Include="UseCases\Users\Register\" />
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="FluentValidation" Version="11.11.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SizeFintech.Communication\SizeFintech.Communication.csproj" />
+    <ProjectReference Include="..\SizeFintech.Domain\SizeFintech.Domain.csproj" />
+    <ProjectReference Include="..\SizeFintech.Exception\SizeFintech.Exception.csproj" />
   </ItemGroup>
 
 </Project>

@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SizeFintech.Exception", "Si
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SizeFintech.Infrastructure", "SizeFintech.Infrastructure\SizeFintech.Infrastructure.csproj", "{1303E3A7-720A-4537-B7F1-904795AFCA12}"
 EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "Sizefintech.Web", "SizeFintech.Frontend\Sizefintech.Web.esproj", "{76469E73-9D62-49B1-A30A-88B780607769}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,12 @@ Global
 		{1303E3A7-720A-4537-B7F1-904795AFCA12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1303E3A7-720A-4537-B7F1-904795AFCA12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1303E3A7-720A-4537-B7F1-904795AFCA12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76469E73-9D62-49B1-A30A-88B780607769}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76469E73-9D62-49B1-A30A-88B780607769}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76469E73-9D62-49B1-A30A-88B780607769}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{76469E73-9D62-49B1-A30A-88B780607769}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76469E73-9D62-49B1-A30A-88B780607769}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76469E73-9D62-49B1-A30A-88B780607769}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

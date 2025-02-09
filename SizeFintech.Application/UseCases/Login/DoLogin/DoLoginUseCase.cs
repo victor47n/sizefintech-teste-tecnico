@@ -3,6 +3,7 @@ using SizeFintech.Communication.Responses;
 using SizeFintech.Domain.Repositories.User;
 using SizeFintech.Domain.Security.Tokens;
 using SizeFintech.Exception.ExceptionsBase;
+using System.Text.RegularExpressions;
 
 namespace SizeFintech.Application.UseCases.Login.DoLogin;
 public class DoLoginUseCase : IDoLoginUseCase
@@ -21,6 +22,10 @@ public class DoLoginUseCase : IDoLoginUseCase
 
     public async Task<ResponseRegisteredUserJson> Execute(RequestLoginJson request)
     {
+        request.CNPJ = Regex.Replace(request.CNPJ, @"\D", "");
+
+        Validate(request);
+
         var user = await _repository.GetUserByCNPJ(request.CNPJ);
 
         if (user is null)
@@ -28,7 +33,6 @@ public class DoLoginUseCase : IDoLoginUseCase
             throw new InvalidLoginException();
         }
 
-        Validate(request);
         
         return new ResponseRegisteredUserJson
         {

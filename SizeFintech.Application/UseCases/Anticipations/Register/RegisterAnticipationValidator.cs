@@ -7,7 +7,6 @@ public class RegisterAnticipationValidator : AbstractValidator<RequestRegisterAn
 {
     public RegisterAnticipationValidator()
     {
-        RuleFor(user => user.CNPJ).NotEmpty().SetValidator(new CNPJValidator<RequestRegisterAnticipationJson>());
         RuleFor(expense => expense.Invoices)
             .NotEmpty()
             .WithMessage(ResourceErrorMessages.INVOICES_MUST_BE_AT_LEAST_ONE)

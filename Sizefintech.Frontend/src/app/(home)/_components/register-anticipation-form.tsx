@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/_components/ui/button";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { Card, CardContent, CardFooter } from "@/_components/ui/card";
 import { toast } from "sonner";
 import { formatCurrency } from "@/_utils/formatCurrency";
@@ -19,7 +19,7 @@ export interface InvoiceProps {
 }
 
 export function RegisterAnticipationForm() {
-  const router = useRouter();
+  // const router = useRouter();
   const [invoices, setInvoices] = useState<InvoiceProps[]>([]);
   const totalGrossAmount = useMemo(() => {
     return invoices.reduce((total, invoice) => total + invoice.grossAmount, 0);

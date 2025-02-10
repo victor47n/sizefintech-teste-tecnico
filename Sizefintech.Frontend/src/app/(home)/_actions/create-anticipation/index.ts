@@ -3,36 +3,60 @@
 import { api } from "@/_lib/axios";
 import { AxiosError } from "axios";
 import { revalidatePath } from "next/cache";
-import { NextResponse } from "next/server";
-import type { InvoiceProps } from "../../_components/register-anticipation-form";
+
+interface InvoiceShortProps {
+  number: string;
+  grossAmount: number;
+  dueDate: string;
+}
+
+interface InvoiceProps {
+  number: string;
+  netAmount: number;
+  grossAmount: number;
+  dueDate: string;
+}
 
 interface AnticipationRegister {
+  invoices: InvoiceShortProps[];
+}
+
+interface AnticipationFullProps {
+  cnpj: string;
+  company: string;
+  limit: number;
+  netTotal: number;
+  grossTotal: number;
   invoices: InvoiceProps[];
+  createdAt: string;
+}
+
+export interface AnticipationResponse {
+  success: boolean;
+  errorMessages?: string[];
+  data?: AnticipationFullProps;
 }
 
 export async function createAnticipation({ invoices }: AnticipationRegister) {
   try {
-    console.log("Action");
-
-    await api.post("/anticipations", {
+    const response = await api.post("/anticipations", {
       invoices,
     });
 
-    console.log("depois do post action");
     revalidatePath("/");
 
-    return NextResponse.json({ success: true });
+    return { success: true, data: response.data } as AnticipationResponse;
   } catch (error: unknown) {
     if (error instanceof AxiosError) {
-      return NextResponse.json(
-        { ...error.response?.data },
-        { status: error.response?.status }
-      );
+      return {
+        success: false,
+        ...(error.response?.data || ["Erro desconhecido"]),
+      } as AnticipationResponse;
     }
 
-    return NextResponse.json(
-      { errorMessages: "Erro desconhecido" },
-      { status: 500 }
-    );
+    return {
+      success: false,
+      errorMessages: ["Erro desconhecido"],
+    } as AnticipationResponse;
   }
 }

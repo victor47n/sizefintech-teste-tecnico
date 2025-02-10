@@ -17,7 +17,6 @@ import {
 } from "@/_components/ui/popover";
 import { cn } from "@/_lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -55,9 +54,13 @@ tomorrow.setHours(0, 0, 0, 0); // Opcional: Zerar a hora para 00:00:00
 
 interface AddInvoiceFormProps {
   handleAddInvoice: (invoice: InvoiceProps) => void;
+  isTotalExceeded: boolean;
 }
 
-export function AddInvoiceForm({ handleAddInvoice }: AddInvoiceFormProps) {
+export function AddInvoiceForm({
+  handleAddInvoice,
+  isTotalExceeded,
+}: AddInvoiceFormProps) {
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -75,6 +78,8 @@ export function AddInvoiceForm({ handleAddInvoice }: AddInvoiceFormProps) {
       grossAmount,
       dueDate,
     });
+
+    form.reset();
   }
 
   return (
@@ -100,7 +105,7 @@ export function AddInvoiceForm({ handleAddInvoice }: AddInvoiceFormProps) {
           control={form.control}
           name="grossAmount"
           render={({ field }) => (
-            <FormItem className="">
+            <FormItem>
               <FormLabel className="font-bold">Valor total</FormLabel>
               <FormControl>
                 <MoneyInput
@@ -119,15 +124,15 @@ export function AddInvoiceForm({ handleAddInvoice }: AddInvoiceFormProps) {
           control={form.control}
           name="dueDate"
           render={({ field }) => (
-            <FormItem className="">
-              <FormLabel>Data de vencimento</FormLabel>
+            <FormItem>
+              <FormLabel className="font-bold">Data de vencimento</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
                     <Button
                       variant={"outline"}
                       className={cn(
-                        "w-[240px] pl-3 text-left font-normal",
+                        "w-full pl-3 text-left font-normal",
                         !field.value && "text-muted-foreground"
                       )}
                     >
@@ -161,7 +166,7 @@ export function AddInvoiceForm({ handleAddInvoice }: AddInvoiceFormProps) {
         <Button
           type="submit"
           className="font-medium w-full col-span-2"
-          disabled={form.formState.isSubmitting}
+          disabled={form.formState.isSubmitting || isTotalExceeded}
         >
           Adicionar nota
         </Button>

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SizeFintech.Communication.Requests;
+using SizeFintech.Communication.Responses;
 using SizeFintech.Domain.Entities;
 using SizeFintech.Domain.Repositories;
 using SizeFintech.Domain.Repositories.Anticipations;
@@ -37,7 +38,7 @@ internal class RegisterAnticipationUseCase : IRegisterAnticipationUseCase
         _loggedUser = loggedUser;
     }
 
-    public async Task Execute(RequestRegisterAnticipationJson request)
+    public async Task<ResponseAnticipationJson> Execute(RequestRegisterAnticipationJson request)
     {
         Validate(request);
 
@@ -54,6 +55,12 @@ internal class RegisterAnticipationUseCase : IRegisterAnticipationUseCase
         await _invoicesRepository.AddAll(anticipation.Invoices);
 
         await _unitOfWork.Commit();
+
+        var response = _mapper.Map<ResponseAnticipationJson>(anticipation);
+        response.CNPJ = loggedUser.CNPJ;
+        response.Company = loggedUser.Name;
+
+        return response;
     }
 
     private void Validate(RequestRegisterAnticipationJson request)
@@ -74,13 +81,11 @@ internal class RegisterAnticipationUseCase : IRegisterAnticipationUseCase
     {
         var industry = await _industriesRepository.GetById(loggedUser.IndustryId);
 
-        var anticipationLimit = GetAnticipationLimit(loggedUser.MonthlyRevenue, industry!.AnticipationLimits);
-
         var totalGross = anticipation.Invoices.Sum(invoice => invoice.GrossAmount);
 
-        var limit = loggedUser.MonthlyRevenue * anticipationLimit.AnticipationPercent;
+        var limit = CalculateUserLimit.Get(loggedUser.MonthlyRevenue, industry!.AnticipationLimits);
 
-        if (anticipationLimit.RevenueMaximum is not null && totalGross > limit)
+        if (totalGross > limit)
         {
             throw new ErrorOnValidationException([string.Format(
                 CultureInfo.InvariantCulture,
@@ -103,14 +108,6 @@ internal class RegisterAnticipationUseCase : IRegisterAnticipationUseCase
 
         anticipation.NetTotal = totalNet;
         anticipation.GrossTotal = totalGross;
-        anticipation.Limit = limit;
-    }
-
-    private AnticipationLimit GetAnticipationLimit(decimal monthlyRevenue, ICollection<AnticipationLimit> anticipationLimits)
-    {
-        return anticipationLimits
-        .Where(limit => monthlyRevenue >= limit.RevenueMinimun && (limit.RevenueMaximum == null || monthlyRevenue <= limit.RevenueMaximum))
-        .OrderByDescending(limit => limit.RevenueMinimun)
-        .First();
+        anticipation.Limit = Math.Round(limit, 2);
     }
 }

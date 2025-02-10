@@ -13,15 +13,15 @@ namespace SizeFintech.Api.Controllers;
 public class AnticipationsController : ControllerBase
 {
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ResponseAnticipationJson), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Register(
         [FromServices] IRegisterAnticipationUseCase useCase,
         [FromBody] RequestRegisterAnticipationJson request)
     {
-        await useCase.Execute(request);
+        var response = await useCase.Execute(request);
 
-        return NoContent();
+        return Created(string.Empty, response) ;
     }
 
     [HttpGet]

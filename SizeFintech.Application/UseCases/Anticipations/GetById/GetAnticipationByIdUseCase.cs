@@ -34,7 +34,7 @@ public class GetAnticipationByIdUseCase : IGetAnticipationByIdUseCase
         }
 
         var response = _mapper.Map<ResponseAnticipationJson>(result);
-        response.Nome = loggedUser.Name;
+        response.Company = loggedUser.Name;
         response.CNPJ = loggedUser.CNPJ;
 
         return response;
